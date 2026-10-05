@@ -690,6 +690,10 @@ a.contact__item:hover { border-color: var(--brand); transform: translateY(-3px);
 }
 
 @media (max-width: 720px) {
+  /* El menu guardado se corre para arriba TODO su alto MAS el alto del
+     encabezado.  Con -130% solo, como el menu es bajito (tiene 2 enlaces),
+     el borde de abajo quedaba justo sobre el encabezado y le tapaba la
+     parte de arriba al logo. */
   .nav {
     position: fixed;
     top: var(--header-h);
@@ -700,15 +704,26 @@ a.contact__item:hover { border-color: var(--brand); transform: translateY(-3px);
     background: var(--bg);
     border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow);
-    transform: translateY(-130%);
-    transition: transform .26s ease;
+    transform: translateY(calc(-100% - var(--header-h) - 2px));
+    visibility: hidden;
+    transition: transform .26s ease, visibility .26s ease;
   }
-  .nav.is-open { transform: translateY(0); }
+  .nav.is-open { transform: translateY(0); visibility: visible; }
   .nav__link { padding: 14px 4px; border-bottom: 1px solid var(--line); border-radius: 0; }
   .nav__link:last-child { border-bottom: none; }
 
-  .burger { display: flex; margin-left: auto; }
-  .nav { margin-left: 0; }
+  /* El encabezado tiene que entrar entero siempre: el nombre se achica un
+     poco y, si igual no entra, se recorta con puntos suspensivos en vez de
+     empujar el boton del menu fuera de la pantalla. Las separaciones van en
+     10 px y no en 14: medido a 390 px de ancho (el celular mas comun), al
+     nombre le faltaban 3 px justos y quedaba cortado. */
+  .header__inner { gap: 10px; }
+  .logo { font-size: 15px; gap: 8px; }
+  .logo__mark { flex: none; width: 32px; height: 32px; font-size: 12px; border-radius: 9px; }
+  .logo, .logo__text { min-width: 0; }
+  .logo__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-btn { flex: none; margin-left: auto; }
+  .burger { display: flex; flex: none; margin-left: 0; }
 
   .section { padding: 62px 0; }
   .features__grid { grid-template-columns: 1fr; padding: 26px 20px; }
@@ -716,6 +731,15 @@ a.contact__item:hover { border-color: var(--brand); transform: translateY(-3px);
   .products { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
   .hero__visual { height: 250px; }
   .whatsapp-float { right: 16px; bottom: 16px; width: 52px; height: 52px; }
+}
+
+/* Telefonos angostos (la mayoria mide 360 px de ancho): con el nombre a 15 px
+   no entra entero y queda cortado con puntos suspensivos, asi que lo achicamos
+   un poco para que se lea completo. */
+@media (max-width: 380px) {
+  .header__inner { gap: 10px; }
+  .logo { font-size: 13px; gap: 7px; }
+  .logo__mark { width: 28px; height: 28px; font-size: 11px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
